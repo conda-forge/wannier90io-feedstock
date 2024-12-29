@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/wannier90io-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/wannier90io-{{ version }}.tar.gz
   sha256: 7b43d0cdcfdca5f3a0ce67b8605fde13c0afbfefb2319bae2f192b2189732c7d
 
 build:
@@ -14,15 +14,15 @@ build:
     - w90io = wannier90io.__main__:main
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 1
+  number: 2
 
 requirements:
   host:
-    - python >=3.8
+    - python {{ python_min }}
     - hatchling
     - pip
   run:
-    - python >=3.8
+    - python >={{ python_min }}
     - numpy
     - pydantic
 
@@ -34,6 +34,7 @@ test:
     - w90io --help
   requires:
     - pip
+    - python {{ python_min }}
 
 about:
   summary: A Python library for Wannier90 I/O
