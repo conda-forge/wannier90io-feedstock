@@ -1,0 +1,56 @@
+schema_version: 1
+
+context:
+  name: wannier90io
+  version: 0.1.0b1
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/wannier90io-${{ version }}.tar.gz
+  sha256: 7b43d0cdcfdca5f3a0ce67b8605fde13c0afbfefb2319bae2f192b2189732c7d
+
+build:
+  number: 3
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    entry_points:
+      - w90io = wannier90io.__main__:main
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - hatchling
+    - pip
+  run:
+    - python >=${{ python_min }}
+    - numpy
+    - pydantic
+
+tests:
+  - python:
+      imports:
+        - wannier90io
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - w90io --help
+
+about:
+  summary: A Python library for Wannier90 I/O
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/jimustafa/wannier90io-python
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
